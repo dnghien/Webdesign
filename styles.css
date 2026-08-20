@@ -1,0 +1,67 @@
+/* .container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+} */
+
+
+
+.product {
+    font-family: "Arial", sans-serif;
+    font-size: 30px;
+    color: purple;
+}
+
+.dashboard {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: #f7f312;
+    flex-grow: 1;
+}
+
+.dashboard .card {
+    font-family: "Arial", sans-serif;
+    font-size: 10px;
+    color: orange;
+
+    width: 200px;
+    margin: 10px;
+    border: 2px solid #d80c53;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #e76b0b;
+
+}
+
+.dashboard .card:hover {
+    font-family: "Arial", sans-serif;
+    font-size: 30px;
+    color: rgb(211, 20, 151);
+}
+
+.container .card {
+    font-family: "Arial", sans-serif;
+    font-size: 30px;
+    color: rgb(224, 101, 19);
+}
+
+#top-product {
+    font-family: "Arial", sans-serif;
+    font-size: 30px;
+    color: rgb(128, 0, 0);
+}
+
+nav a:hover {
+    color: rgb(255, 153, 0);
+}
+
+@media sreen and (max-width: 600px) {
+    .dashboard {
+        font-size: 20px;
+        padding: 10px;
+
+    }
+}
