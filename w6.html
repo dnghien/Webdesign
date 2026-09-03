@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="app.js" defer></script>
+    <!-- <style>
+      h1 {
+        color: red;
+      }
+    </style> -->
+</head>
+
+<body>
+    <header>
+        <img src="https://fda.neu.edu.vn/wp-content/uploads/2026/01/Logo_FDA_2026-880x138.png" alt="Image"
+            width="400px" />
+        <h1 class="h1-title">Web Design and Programming</h1>
+    </header>
+
+    <nav>
+        <a href="#Overview">Overview</a>
+        <a href="#Features">Features</a>
+        <a href="#Details">Details</a>
+        <a href="#Conclusion">Conclusion</a>
+    </nav>
+
+    <main>
+        <section id="Overview">
+            <h2>Overview</h2>
+            <p>
+                In this week, we will learn about the basic structure of an
+                <strong>HTML</strong> document, including the use of
+                <em>headings, paragraphs, lists, images, and links</em>. We will also
+                explore how to create internal and external links within our web
+                pages.
+            </p>
+        </section>
+
+        <section id="Features">
+            <h2>Features</h2>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                aliquip ex ea commodo consequat.
+            </p>
+            <p>
+                We will practice creating a simple web page that includes various HTML
+                elements, such as headings, paragraphs, ordered and unordered lists,
+                images, and links. By the end of this week, we should have a solid
+                understanding of how to structure our web pages using HTML.
+            </p>
+        </section>
+
+        <section id="Details">
+            <h2>Details</h2>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                aliquip ex ea commodo consequat.
+            </p>
+            <p>
+                We will practice creating a simple web page that includes various HTML
+                elements, such as headings, paragraphs, ordered and unordered lists,
+                images, and links. By the end of this week, we should have a solid
+                understanding of how to structure our web pages using HTML.
+            </p>
+            <p>First, let's see how to use list and link:</p>
+            <ul>
+                <li>
+                    External link:
+                    <a href="https://fda.neu.edu.vn" target="_blank">FDA Page</a>
+                </li>
+                <li>Internal link: <a href="#Details">Go to Details Section</a></li>
+            </ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>Accuracy</th>
+                        <th>f1-score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Linear Regression</td>
+                        <td>0.85</td>
+                        <td>0.82</td>
+                    </tr>
+                    <tr>
+                        <td>Logistic Regression</td>
+                        <td>0.95</td>
+                        <td>0.93</td>
+                    </tr>
+                    <tr>
+                        <td>Random Forest</td>
+                        <td>0.92</td>
+                        <td>0.90</td>
+                    </tr>
+                </tbody>
+                <caption>
+                    Sample Table: Model Performance
+                </caption>
+            </table>
+        </section>
+
+        <section id="Conclusion">
+            <h2>Conclusion</h2>
+            <p>
+                In conclusion, this week we have learned the fundamental structure of
+                an HTML document and how to use various HTML elements to create a
+                simple web page. We have also explored how to create internal and
+                external links, which are essential for navigating between different
+                sections of a web page or linking to other web pages.
+            </p>
+        </section>
+
+        <section id="Contact">
+            <h2>Contact</h2>
+            <form action="">
+                <label for="name">Name:</label>
+                <input type="text" id="hoten" name="hoten" required />
+
+                <br />
+
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" />
+
+                <br />
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required />
+
+                <br />
+
+                <label for="gender">Gender:</label>
+                <select name="gender" id="gender">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+
+                <br />
+
+                <label for="message">Message:</label>
+                <textarea name="message" id="message" placeholder="Enter your message here..."></textarea>
+
+                <br />
+
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+    </main>
+
+    <div class="dashboard">
+        <div class="card product" id="top-product">Product 1</div>
+        <div class="card product">Product 2</div>
+        <div class="card product">Product 3</div>
+        <div class="card product" id="top-product">Product 4</div>
+        <div class="card product">Product 5</div>
+        <div class="card product">Product 6</div>
+    </div>
+
+</body>
+
+</html>

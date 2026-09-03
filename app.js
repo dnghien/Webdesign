@@ -1,20 +1,22 @@
-let form = document.querySelector("#score-form");
+async function greet() {
+    return "Hello, World!";
+}
 
-form.addEventListener("submit", function (event) {
-    event.preventDefault();
+console.log(greet());
 
+//c1
+async function getData() {
+    let text = ""
+    greet().then((response) => {
+        text = response;
+    });
+    return text;
+}
+console.log(getData());
 
-    let mon1 = document.querySelector("#mon1").value;
-    let mon2 = document.querySelector("#mon2").value;
-    let mon3 = document.querySelector("#mon3").value;
-    console.log("mon1", mon1);
-    console.log("mon2", mon2);
-    console.log("mon3", mon3);
+async function getData() {
+    const text = await greet();
+    console.log(text);
+}
 
-    let totalScore = parseFloat(mon1) + parseFloat(mon2) + parseFloat(mon3);
-    console.log("totalScore", totalScore);
-
-    let sum = document.querySelector("#sum");
-    sum.textContent = "Total Score: " + totalScore;
-
-});
+getData();
