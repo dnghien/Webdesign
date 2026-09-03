@@ -5,37 +5,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
 </head>
 
 <body>
-    <h1>Over view</h1>
-    <a href="https://fda.neu.edu.vn" target="_blank">External link</a>
-    <br>
-    <a href="#Features">Internal link</a>
+    <header>
+        <h1> Exam Result </h1>
+    </header>
+    <main>
+        <form action="" id="score-form">
+            <div class="score">
+                <label for="mon1">Enter your score:</label>
+                <input type="number" id="mon1" name="mon1" />
+            </div>
 
-    <figure>
-        <img src="https://fda.neu.edu.vn/wp-content/uploads/2025/03/z6365868680251_62b53bff3bd9017ce9872c3e9ded0573-1-e1741016864539.jpg"
-            alt="Image" width="300px" />
+            <div class="score">
+                <label for="mon2">Enter your score:</label>
+                <input type="number" id="mon2" name="mon2" />
+            </div>
 
-        <figcaption>Fig1. Anh tuyen sinh 2026</figcaption>
-    </figure>
+            <div class="score">
+                <label for="mon3">Enter your score:</label>
+                <input type="number" id="mon3" name="mon3" />
+            </div>
 
-    <p> Các phòng lab được trang bị hiện đại, chuẩn quốc tế là môi trường thực hành, trải nghiệm các dự án nghiên cứu,
-        chuyển giao công nghệ.</p>
-
-    <ol>
-        <li>Phòng Lab Robotics</li>
-        <li>Phòng Lab IoT</li>
-        <li>Phòng Lab AI</li>
-        <li>Phòng Lab AR/VR</li>
-    </ol>
-
-    <ul>
-        <li>Phòng Lab Blockchain</li>
-        <li>Phòng Lab Big Data</li>
-        <li>Phòng Lab Cloud Computing</li>
-    </ul>
-
+            <button type="submit"> Calculate </button>
+        </form>
+    </main>
 </body>
 
 </html>
