@@ -1,0 +1,40 @@
+body {
+    font-family: "Arial", sans-serif;
+}
+
+header {
+    background-color: lightblue;
+    margin-bottom: 20px;
+    padding: 10px;
+    text-align: center;
+    color: white;
+}
+
+#score-form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#score-form button {
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#user-table th,
+#user-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+#user-table th {
+    background-color: #f2f2f2;
+}
