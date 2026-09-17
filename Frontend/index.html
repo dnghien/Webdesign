@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Items</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <main>
+        <div id="form-create">
+            <h3>Add new item</h3>
+
+            <form id="item-form">
+                <div>
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <br>
+
+                <div>
+                    <label for="price">Price</label>
+                    <input type="number" min="0" id="price" name="price" required>
+                </div>
+
+                <br>
+
+                <button id="submit-btn" type="submit">Add</button>
+                <button id="cancel-btn" type="button">Cancel</button>
+            </form>
+
+            <p id="message" class="message"></p>
+        </div>
+
+        <div>
+            <button onclick="fetchData()">Fetch data</button>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script defer src="./app.js"></script>
+
+</body>
+
+</html>

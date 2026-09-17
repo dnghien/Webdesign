@@ -1,40 +1,129 @@
 body {
-    font-family: "Arial", sans-serif;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #eaf7ff, #dff7ef);
+    color: #123;
 }
 
-header {
-    background-color: lightblue;
-    margin-bottom: 20px;
-    padding: 10px;
-    text-align: center;
+main {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 24px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(20, 100, 140, 0.12);
+}
+
+#form-create {
+    margin-bottom: 24px;
+    padding: 20px;
+    border-radius: 10px;
+    background: #f2fbff;
+    border: 1px solid #cfeaf7;
+}
+
+#form-create h3 {
+    margin-top: 0;
+    color: #0b5f82;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #1a4d62;
+}
+
+input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #b9dfe8;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+button[type="submit"],
+button[onclick*="fetchData"] {
+    background: linear-gradient(135deg, #0ea5e9, #22c55e);
     color: white;
 }
 
-#score-form {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
+button[type="button"] {
+    background: #dfeaf1;
+    color: #174b66;
 }
 
-#score-form button {
-    padding: 5px 10px;
-    font-size: 16px;
-    cursor: pointer;
+.edit-btn {
+    background: #3b82f6;
+    color: white;
+    margin-right: 8px;
+    padding: 8px 12px;
 }
 
-#user-table {
+.delete-btn {
+    background: #ef4444;
+    color: white;
+    padding: 8px 12px;
+}
+
+button:hover {
+    filter: brightness(1.04);
+}
+
+.message {
+    display: none;
+    margin-top: 12px;
+    font-weight: 600;
+}
+
+table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 18px;
+    background: white;
+    overflow: hidden;
+    border-radius: 10px;
 }
 
-#user-table th,
-#user-table td {
-    border: 1px solid #ccc;
-    padding: 10px;
+thead th {
+    background: linear-gradient(135deg, #0ea5e9, #10b981);
+    color: white;
     text-align: left;
+    padding: 14px 12px;
+    font-size: 14px;
 }
 
-#user-table th {
-    background-color: #f2f2f2;
+tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #dfeaf1;
+    color: #123;
+}
+
+tbody tr:nth-child(even) {
+    background: #f5fbff;
+}
+
+tbody tr:hover {
+    background: #ebfbf5;
+}
+
+td button {
+    background: #ef4444;
+    color: white;
+    padding: 8px 12px;
 }
