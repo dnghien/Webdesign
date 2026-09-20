@@ -49,15 +49,17 @@ if (form) {
             });
 
             if (!response.ok) {
-                throw new Error("Không thể lưu dữ liệu");
+                const error = await response.json();
+                throw new Error(error.detail || "Không thể lưu dữ liệu");
             }
 
+            const wasEditing = editingId !== null;
             await fetchData();
             resetForm();
-            showMessage(editingId !== null ? "Cập nhật thành công." : "Thêm thành công.");
+            showMessage(wasEditing ? "Cập nhật thành công." : "Thêm thành công.");
         } catch (err) {
             console.error(err);
-            showMessage("Có lỗi khi lưu dữ liệu.", true);
+            showMessage(err.message || "Có lỗi khi lưu dữ liệu.", true);
         }
     });
 }
@@ -71,11 +73,16 @@ async function fetchData() {
 
     try {
         const response = await fetch(`${API_BASE}/items`);
+        if (!response.ok) {
+            throw new Error("Không thể tải dữ liệu");
+        }
+
         const data = await response.json();
+        const items = data.items;
 
         tbody.innerHTML = "";
 
-        data.forEach(item => {
+        items.forEach(item => {
             const row = document.createElement("tr");
 
             row.innerHTML = `

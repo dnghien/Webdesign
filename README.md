@@ -1,205 +1,74 @@
-# Week 06 Assignment — Mini House-Price Prediction API
+# Week 07 — Extended Lab 4
 
-## Project Structure
+FastAPI routing and request/response practice.
+
+## Run the API
 
 ```text
-project/
-├── Frontend/
-│   └── Webdesign/
-│       └── house_form.html
-├── backend/
-│   └── main.py
-└── README.md
-```
-
-## How to Run the Project
-
-### Step 1: Open the backend folder
-
-Open the terminal in VS Code and run:
-
-```bash
-cd backend
-```
-
-### Step 2: Start the FastAPI server
-
-```bash
+```powershell
+cd "C:\New folder\Backend"
+..\.venv\Scripts\Activate.ps1
 uvicorn main:app --reload
 ```
 
-The server will run at:
+Open `http://127.0.0.1:8000/docs` to test the API with Swagger UI.
+
+## Lab 4 endpoints
+
+- `GET /items`: filtering, searching, sorting, and pagination envelope.
+- `POST /items`: creates an item and rejects duplicate names with `409`.
+- `PUT /items/{item_id}`: replaces an item and checks duplicate names.
+- `PATCH /items/{item_id}`: changes only fields sent by the client.
+- `GET /items/{item_id}` and `DELETE /items/{item_id}`: retrieve or delete an item.
+- `POST /predict/house-price`: validates a request body and returns a toy VND prediction.
+
+### List query parameters
+
+`GET /items` accepts:
 
 ```text
-http://127.0.0.1:8000
+skip=0&limit=10&min_price=0&max_price=100000&q=phone&sort_by=price&order=desc
 ```
 
-### Step 3: Test the API with Swagger UI
-
-Open:
-
-```text
-http://127.0.0.1:8000/docs
-```
-
-Expand `GET /predict`, click **Try it out**, and enter:
-
-```text
-area = 80
-bedrooms = 3
-location = hanoi
-```
-
-The returned JSON is:
+Filtering and searching happen before sorting, and sorting happens before `skip`/`limit` slicing. The response is:
 
 ```json
 {
-  "area": 80.0,
-  "bedrooms": 3,
-  "location": "hanoi",
-  "predicted_price": 845000000.0
+   "items": [],
+   "total": 0,
+   "skip": 0,
+   "limit": 10
 }
 ```
 
-### Step 4: Test using the browser URL
-
-The same request can be tested directly in the browser:
-
-```text
-http://127.0.0.1:8000/predict?area=80&bedrooms=3&location=hanoi
-```
-
-## Task 3 — Explanation
-
-### Why does `/predict` still work without `location`?
-
-`location` is an optional query parameter because it has a default value of `"other"`:
-
-```python
-location: str = "other"
-```
-
-Therefore, when `location` is not provided, FastAPI automatically uses `"other"`.
-
-For example:
-
-```text
-http://127.0.0.1:8000/predict?area=80&bedrooms=3
-```
-
-still works.
-
-### Why does `/predict` return a 422 error without `area`?
-
-`area` is a required query parameter because it does not have a default value:
-
-```python
-area: float
-```
-
-FastAPI automatically validates the request. If `area` is missing, the request does not satisfy the required parameters, so FastAPI returns:
-
-```text
-422 Unprocessable Entity
-```
-
-## Task 4 — Serving the Frontend
-
-The frontend is served directly by FastAPI using `StaticFiles`:
-
-```python
-app.mount("/static", StaticFiles(directory="../Frontend/Webdesign"), name="static")
-```
-
-The frontend can be opened at:
-
-```text
-http://127.0.0.1:8000/static/house_form.html
-```
-
-This means the frontend and backend use the same origin:
-
-```text
-127.0.0.1:8000
-```
-
-This avoids the cross-origin problem that would occur if the frontend were opened using Live Server on a different port.
-
-## Task 5 — Connecting the Form to the API
-
-The JavaScript in `house_form.html` reads the values of `area`, `bedrooms`, and `location` from the form.
-
-It then sends a request using:
-
-```javascript
-fetch(`/predict?area=${area}&bedrooms=${bedrooms}&location=${location}`)
-```
-
-The URL `/predict` is a relative URL.
-
-### Why does a relative URL work?
-
-The frontend and the `/predict` API are served from the same FastAPI server and the same origin (`127.0.0.1:8000`). Therefore, the browser automatically sends the request to the same server.
-
-The relative URL `/predict` is simpler than writing the full URL:
-
-```text
-http://127.0.0.1:8000/predict
-```
-
-The JavaScript then waits for the response, converts it to JSON, and displays the predicted price with thousands separators.
-
-If the request fails, the page displays an error message instead of crashing.
-
-## Task 6 — Bonus: POST /predict
-
-A second `POST /predict` endpoint was added using a Pydantic model.
-
-The model is:
-
-```python
-class HouseInput(BaseModel):
-    area: float
-    bedrooms: int
-    location: str = "other"
-```
-
-The POST endpoint receives the house information as a JSON request body.
-
-Example:
+### PATCH example
 
 ```json
 {
-  "area": 80,
-  "bedrooms": 3,
-  "location": "hanoi"
+   "price": 250000
 }
 ```
 
-### Difference between GET query parameters and POST JSON body
+Only `price` changes; the existing `name` remains unchanged. An unknown item returns `404`.
 
-The GET endpoint sends data through the URL as query parameters:
+### House-price example
 
-```text
-/predict?area=80&bedrooms=3&location=hanoi
+```json
+{
+   "area_sqm": 80,
+   "bedrooms": 3,
+   "distance_to_center_km": 5
+}
 ```
 
-The POST endpoint sends the data inside the request body as JSON.
+The request returns a response such as:
 
-## Conclusion
-
-This project demonstrates the complete data flow:
-
-```text
-HTML Form
-   ↓
-JavaScript fetch()
-   ↓
-FastAPI /predict
-   ↓
-Python predict_price()
-   ↓
-JSON Response
-   ↓
-Predicted price displayed on the webpage
+```json
+{
+   "predicted_price": 1235000000,
+   "currency": "VND"
+}
 ```
+
+`area_sqm` must be greater than `0`, and `bedrooms` must be at least `0`. Invalid values return `422` automatically through Pydantic `Field` validation.
+
