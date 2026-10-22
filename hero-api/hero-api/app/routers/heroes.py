@@ -10,10 +10,17 @@ from app.models import (
 router = APIRouter(tags=["heroes"])
 
 
+def error(status_code: int, detail: str) -> dict:
+    """OpenAPI description of an error response, shown in /docs and /redoc."""
+    return {status_code: {"description": detail,
+                          "content": {"application/json": {"example": {"detail": detail}}}}}
+
+
 def not_found(detail: str) -> dict:
-    """OpenAPI description of a 404 response, shown in /docs and /redoc."""
-    return {404: {"description": detail,
-                  "content": {"application/json": {"example": {"detail": detail}}}}}
+    return error(404, detail)
+
+
+UNKNOWN_TEAM = error(400, "Team not found")
 
 
 # ---------- helpers ----------
@@ -25,13 +32,14 @@ def get_hero_or_404(session: SessionDep, hero_id: int) -> Hero:
 
 
 def ensure_team_exists(session: SessionDep, team_id: int | None) -> None:
+    # 400, not 404: the URL is fine, the team_id inside the body is invalid
     if team_id is not None and session.get(Team, team_id) is None:
-        raise HTTPException(status_code=404, detail="Team not found")
+        raise HTTPException(status_code=400, detail="Team not found")
 
 
 # ---------- Heroes ----------
 @router.post("/heroes", response_model=HeroPublic, status_code=201,
-             summary="Create a hero", responses=not_found("Team not found"))
+             summary="Create a hero", responses=UNKNOWN_TEAM)
 def create_hero(hero_in: HeroCreate, session: SessionDep):
     """Create a hero. `team_id` is optional but must point to an existing team."""
     ensure_team_exists(session, hero_in.team_id)
@@ -74,7 +82,7 @@ def read_hero(hero_id: int, session: SessionDep):
 
 
 @router.patch("/heroes/{hero_id}", response_model=HeroPublic,
-              summary="Update a hero", responses=not_found("Hero not found / Team not found"))
+              summary="Update a hero", responses={**not_found("Hero not found"), **UNKNOWN_TEAM})
 def update_hero(hero_id: int, hero_in: HeroUpdate, session: SessionDep):
     """Partial update: only the fields sent are changed. Send `team_id` to move the hero to another team."""
     hero = get_hero_or_404(session, hero_id)
