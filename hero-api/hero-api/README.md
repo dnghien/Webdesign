@@ -21,6 +21,7 @@ fastapi dev app/main.py   # http://127.0.0.1:8000/docs  and  /redoc
 - `app/routers/teams.py` — teams (409 on duplicate name), heroes of a team
 - `app/seed.py` — 2 teams, 20 heroes and 2 missions using relationships
 - `migrations/` — Alembic: `initial schema` → `add hero.power` → `add hero status and created_at` → `add string length limits`
+- `frontend/index.html` — Lab 2 page (fetch + CORS)
 - `sql/warmup.sql` — Part 1 SQL
 - `answers.md` — answers to Questions 1–20
 
@@ -36,6 +37,15 @@ fastapi dev app/main.py   # http://127.0.0.1:8000/docs  and  /redoc
 
 Validation: `name` 2–50 chars, `age` 0–200, `power` ≤ 100, `secret_name` 2–50, `status` ∈ {active, retired};
 team `name` 2–50 (unique), `headquarters` 2–100. Invalid input → 422.
+
+## Lab 2 — CORS + Fetch
+- `app/main.py` adds `CORSMiddleware` for the Live Server origins `http://127.0.0.1:5500` and `http://localhost:5500`.
+- `frontend/index.html`: right-click → **Open with Live Server** (API must be running on port 8000).
+  - Heroes table from `GET /api/v1/heroes`, built with `textContent` only (no `innerHTML`).
+  - Form → `POST /api/v1/heroes`: 201 refreshes the table, 422 shows the error under each field (try age `-5`).
+  - Team `<select>` filled from `GET /api/v1/teams`; choosing a team lists `GET /api/v1/teams/{id}/heroes`.
+- CORS test: comment out your origin in `origins`, reload the page → the console shows
+  *"blocked by CORS policy: No 'Access-Control-Allow-Origin' header"*; restore it and reload.
 
 ## Endpoints (all under `/api/v1`)
 | Method | Path | Status |

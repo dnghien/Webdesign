@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel
 
 from app import models  # noqa: F401 (importing the models registers them in SQLModel.metadata)
@@ -25,6 +26,19 @@ app = FastAPI(
     version="1.0.0",
     openapi_tags=tags_metadata,
     lifespan=lifespan,
+)
+
+# Lab 2: allow the frontend served by VS Code Live Server to call the API from the browser
+origins = [
+    "http://127.0.0.1:5500",
+    "http://localhost:5500",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(heroes.router, prefix="/api/v1")

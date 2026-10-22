@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hero API — Lab 2</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+    h1 { margin-bottom: .25rem; }
+    section { margin-top: 2rem; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: .4rem .6rem; text-align: left; }
+    th { background: #f3f3f3; }
+    form { display: grid; grid-template-columns: 9rem 1fr; gap: .5rem 1rem; max-width: 32rem; }
+    form button { grid-column: 2; justify-self: start; }
+    input, select, button { font: inherit; padding: .3rem .5rem; }
+    .field-error { grid-column: 2; color: #b00020; font-size: .85rem; margin-top: -.4rem; }
+    .field-error:empty { display: none; }
+    .invalid { border-color: #b00020; outline: 1px solid #b00020; }
+    #message { min-height: 1.5rem; }
+    .ok { color: #1b7f3b; }
+    .error { color: #b00020; }
+  </style>
+</head>
+<body>
+  <h1>Heroes</h1>
+  <p id="message" role="status"></p>
+
+  <section>
+    <h2>All heroes</h2>
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Name</th><th>Age</th><th>Power</th><th>Team</th><th>Status</th></tr>
+      </thead>
+      <tbody id="heroes-body"></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Add a hero</h2>
+    <form id="hero-form" novalidate>
+      <label for="name">Name</label>
+      <input id="name" name="name" required>
+      <span class="field-error" data-for="name"></span>
+
+      <label for="secret_name">Secret name</label>
+      <input id="secret_name" name="secret_name" required>
+      <span class="field-error" data-for="secret_name"></span>
+
+      <label for="age">Age</label>
+      <input id="age" name="age" type="number">
+      <span class="field-error" data-for="age"></span>
+
+      <label for="power">Power</label>
+      <input id="power" name="power">
+      <span class="field-error" data-for="power"></span>
+
+      <label for="team_id">Team</label>
+      <select id="team_id" name="team_id"><option value="">— no team —</option></select>
+      <span class="field-error" data-for="team_id"></span>
+
+      <label for="status">Status</label>
+      <select id="status" name="status">
+        <option value="active">active</option>
+        <option value="retired">retired</option>
+      </select>
+      <span class="field-error" data-for="status"></span>
+
+      <button type="submit">Add hero</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Heroes of a team</h2>
+    <select id="team-view"><option value="">— choose a team —</option></select>
+    <ul id="team-heroes"></ul>
+  </section>
+
+  <script>
+    const API = "http://127.0.0.1:8000/api/v1";
+
+    const message = document.getElementById("message");
+    const heroesBody = document.getElementById("heroes-body");
+    const form = document.getElementById("hero-form");
+    const teamSelect = document.getElementById("team_id");
+    const teamView = document.getElementById("team-view");
+    const teamHeroes = document.getElementById("team-heroes");
+
+    let teamNames = {};  // id -> name, used to show the team column
+
+    function showMessage(text, kind) {
+      message.textContent = text;
+      message.className = kind;
+    }
+
+    // ---------- GET /heroes -> table (textContent only, never innerHTML) ----------
+    async function loadHeroes() {
+      try {
+        const res = await fetch(`${API}/heroes?limit=100`);
+        if (!res.ok) throw new Error(`GET /heroes failed: ${res.status}`);
+        const heroes = await res.json();
+
+        heroesBody.replaceChildren();
+        for (const hero of heroes) {
+          const row = document.createElement("tr");
+          const cells = [hero.id, hero.name, hero.age ?? "", hero.power ?? "",
+                         teamNames[hero.team_id] ?? "", hero.status];
+          for (const value of cells) {
+            const td = document.createElement("td");
+            td.textContent = value;
+            row.append(td);
+          }
+          heroesBody.append(row);
+        }
+      } catch (err) {
+        // A CORS block also lands here: the browser hides the response and fetch throws TypeError
+        showMessage(`Could not load heroes (${err.message}). Is the API running and is this origin allowed by CORS?`, "error");
+      }
+    }
+
+    // ---------- GET /teams -> both <select>s ----------
+    async function loadTeams() {
+      try {
+        const res = await fetch(`${API}/teams`);
+        if (!res.ok) throw new Error(`GET /teams failed: ${res.status}`);
+        const teams = await res.json();
+        teamNames = {};
+        for (const team of teams) {
+          teamNames[team.id] = team.name;
+          for (const select of [teamSelect, teamView]) {
+            const option = document.createElement("option");
+            option.value = team.id;
+            option.textContent = team.name;
+            select.append(option);
+          }
+        }
+      } catch (err) {
+        showMessage(`Could not load teams (${err.message}).`, "error");
+      }
+    }
+
+    // ---------- GET /teams/{id}/heroes ----------
+    teamView.addEventListener("change", async () => {
+      teamHeroes.replaceChildren();
+      if (!teamView.value) return;
+      const res = await fetch(`${API}/teams/${teamView.value}/heroes`);
+      if (!res.ok) {
+        showMessage(`GET /teams/${teamView.value}/heroes failed: ${res.status}`, "error");
+        return;
+      }
+      for (const hero of await res.json()) {
+        const li = document.createElement("li");
+        li.textContent = `${hero.name} (${hero.power ?? "no power"})`;
+        teamHeroes.append(li);
+      }
+    });
+
+    // ---------- POST /heroes ----------
+    function clearFieldErrors() {
+      for (const span of form.querySelectorAll(".field-error")) span.textContent = "";
+      for (const input of form.querySelectorAll(".invalid")) input.classList.remove("invalid");
+    }
+
+    function showFieldErrors(detail) {
+      // FastAPI 422 body: {"detail": [{"loc": ["body", "age"], "msg": "..."}, ...]}
+      for (const err of detail) {
+        const field = err.loc[err.loc.length - 1];
+        const span = form.querySelector(`.field-error[data-for="${field}"]`);
+        if (span) {
+          span.textContent = err.msg;
+          form.elements[field]?.classList.add("invalid");
+        } else {
+          showMessage(err.msg, "error");
+        }
+      }
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearFieldErrors();
+
+      const data = Object.fromEntries(new FormData(form));
+      // Empty optional fields -> null; age and team_id are numbers
+      const body = {
+        name: data.name,
+        secret_name: data.secret_name,
+        age: data.age === "" ? null : Number(data.age),
+        power: data.power === "" ? null : data.power,
+        team_id: data.team_id === "" ? null : Number(data.team_id),
+        status: data.status,
+      };
+
+      try {
+        const res = await fetch(`${API}/heroes`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        if (res.status === 201) {
+          const hero = await res.json();
+          showMessage(`Created hero #${hero.id} ${hero.name}.`, "ok");
+          form.reset();
+          await loadHeroes();
+        } else if (res.status === 422) {
+          showMessage("Please fix the highlighted fields.", "error");
+          showFieldErrors((await res.json()).detail);
+        } else {
+          const err = await res.json().catch(() => ({}));
+          showMessage(`Error ${res.status}: ${err.detail ?? res.statusText}`, "error");
+        }
+      } catch (err) {
+        showMessage(`Request failed (${err.message}). Check the API and CORS.`, "error");
+      }
+    });
+
+    // Teams first so the table can show team names
+    loadTeams().then(loadHeroes);
+  </script>
+</body>
+</html>
